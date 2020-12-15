@@ -9,7 +9,6 @@ void error_arguments();
 typedef struct {
 	char name[100];
 	int age;
-	int uuid;
 	char domisili[20];
 	bool isTestRequired;
 } User;
@@ -49,7 +48,7 @@ int main(int argc, char *argv[]) {
 			
 		} else if (argc > 2) {
 			// Jika argument yang dimasukkan lebih dari dua
-			error_arguments();
+			error_message();
 			printf("Error: Terlalu banyak argument yang dimasukkan!");
 			printf("Usage: ./<project_name> 'input|read|count' ");
 		}
