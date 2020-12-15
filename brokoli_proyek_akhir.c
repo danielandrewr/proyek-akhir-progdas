@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 	if (pFile != NULL) {
 		if (argc == 3) {
 			int user_number = argc - 1;
-			if (strcmp(argv[2], "input") == 0) {
+			if (strcmp(argv[3], "input") == 0) {
 				if (user_number < MAX_USER_INPUT) {
 					int i, j;
 					User user[user_number];
