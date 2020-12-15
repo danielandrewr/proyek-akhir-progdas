@@ -16,14 +16,14 @@ typedef struct {
 
 int main(int argc, char *argv[]) {
 	// File Handler
-	FILE *fptr;
+	FILE *pFile;
 	pFile = fopen("user_database.txt", "w");
 	
 	// Untuk menghitung banyak data yang sudah tersimpan
 	int user_count = 0;
 	
 	if (pFile != NULL) {
-		if (argc == 3) {
+		if (argc == 2) {
 			int user_number = argc - 1;
 			if (strcmp(argv[2], "input") == 0) {
 				if (user_number < MAX_USER_INPUT) {
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 				}
 			}
 			
-		} else if (argc > 3) {
+		} else if (argc > 2) {
 			// Jika argument yang dimasukkan lebih dari dua
 			error_message();
 			printf("Error: Terlalu banyak argument yang dimasukkan!");
@@ -67,4 +67,3 @@ int main(int argc, char *argv[]) {
 void error_message() {
 	printf("Terjadi kesalahan pada program:");
 }
-
