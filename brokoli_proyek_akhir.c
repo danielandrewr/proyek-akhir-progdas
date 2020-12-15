@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 	int user_count = 0;
 	
 	if (pFile != NULL) {
-		if (argc == 2) {
+		if (argc == 3) {
 			int user_number = argc - 1;
 			if (strcmp(argv[2], "input") == 0) {
 				if (user_number < MAX_USER_INPUT) {
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 				}
 			}
 			
-		} else if (argc > 2) {
+		} else if (argc > 3) {
 			// Jika argument yang dimasukkan lebih dari dua
 			error_message();
 			printf("Error: Terlalu banyak argument yang dimasukkan!");
