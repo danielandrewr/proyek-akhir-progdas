@@ -111,11 +111,51 @@ int main(void) {
 						
 						
 					} else if (answer == 'N') {
-						// Mungkin OTG ??	
+						user[i].test_status = 2;
+						make_question("Apakah ada anggota keluarga anda yang sering berpergian?\n", answer_buffer, sizeof(answer_buffer));
+						printf(">> %s", answer_buffer);
+						scanf("%s", &answer);
+						if (answer == 'Y') {
+							puts("");
+							make_question("Apakah anda merasakan demam tinggi dalam 7 hari terakhir?\n", answer_buffer, sizeof(answer_buffer));
+							printf(">> %s", answer_buffer);
+							scanf("%s", &answer);
+							if (answer == 'Y') user[i].common_symptoms+=1;
+							
+							make_question("Apakah anda mengalami batuk kering dalam 7 hari terakhir?\n", answer_buffer, sizeof(answer_buffer));
+							printf(">> %s", answer_buffer);
+							scanf("%s", &answer);
+							if (answer == 'Y') user[i].common_symptoms+=1;
+							
+							make_question("Apakah anda dapat mencium bau dan mengecap rasa dengan normal?\n", answer_buffer, sizeof(answer_buffer));
+							printf(">> %s", answer_buffer);
+							scanf("%s", &answer);
+							if (answer == 'Y') user[i].uncommon_symptoms+=1;
+							
+							make_question("Apakah anda merasa nyeri di area dada?\n", answer_buffer, sizeof(answer_buffer));
+							printf(">> %s", answer_buffer);
+							scanf("%s", &answer);
+							if (answer == 'Y') user[i].serious_symptoms+=1;
+							
+						} else if (answer == 'N') {
+							goto check_result;
+						}	
 					}
 					
-					
-					
+					check_result:
+						if ((user[i].common_symptoms >= 1) && (user[i].serious_symptoms >= 1)) {
+							user[i].test_status = 1;
+						} else if ((user[i].common_symptoms == 0) && (user[i].serious_symptoms == 0)) {
+							user[i].test_status = 0;
+						}
+						
+						if (user[i].test_status == 2) {
+							if ((user[i].common_symptoms == 0) && (user[i].serious_symptoms == 0)) {
+								goto check_result;
+							} else if ((user[i].common_symptoms >= 1) && (user[i].serious_symptoms >= 1)) {
+								user[i].test_status = 1;
+							}
+						}
 					i++;
 				}
 				
@@ -131,7 +171,15 @@ int main(void) {
 					printf("Uncommon\t: %i\n", user[i].uncommon_symptoms);
 					printf("Serious\t\t: %i\n", user[i].serious_symptoms);
 					printf("-=-=-=-=-=-=-=-=-=- Hasil Analisa -=-=-=-=-=-=-=-=-=-=-\n");
-					printf("");
+					if (user[i].test_status == 1) {
+						printf("%s sangat disarankan untuk mengambil SWAB Test di rumah sakit terdekat.", user[i].name);
+					} else if (user[i].test_status == 2) {
+						printf("%s berpotensi OTG (Orang Tanpa Gejala) disarankan untuk mengambil SWAB Test\n", user[i].name);
+						printf("di rumah sakit/puskesmas terdekat.");
+					} else if (user[i].test_status == 0) {
+						printf("%s tidak memiliki gejala umum dan serius. Mungkin tidak terjangkit\n", user[i].name);
+						printf("Namun tetap disarankan untuk menjaga protokol kesehatan dan social distancing.");
+					}
 				}
 			} else {
 				error_message();
@@ -146,6 +194,7 @@ int main(void) {
 		}
 		
 		char answer;
+		puts("");
 		make_question("\nAnda telah menyelesaikan input data, Apakah anda ingin melanjutkan ke main menu? (Y/N)\n", answer_buffer, sizeof(answer_buffer));
 		printf(">> %s", answer_buffer);
 		scanf("%s", &answer);
