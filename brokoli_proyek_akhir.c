@@ -43,7 +43,11 @@ int main(void) {
 				make_question("\nApakah anda ingin melanjutkan ke main menu? (Y/N)\n", answer_buffer, sizeof(answer_buffer));
 				printf(">> %s", answer_buffer);
 				scanf("%s", &answer);
-				if (answer == 'Y') goto menu;
+				if (answer == 'Y') {
+					goto menu;
+				} else {
+					return 0;
+				}
 			} else {
 				error_message();
 				printf("File database tidak berhasil dibuka, Menghentikan program.\n");
@@ -56,7 +60,11 @@ int main(void) {
 			make_question("\nApakah anda ingin melanjutkan ke main menu? (Y/N)\n", answer_buffer, sizeof(answer_buffer));
 			printf(">> %s", answer_buffer);
 			scanf("%s", &answer);
-			if (answer == 'Y') goto menu;
+			if (answer == 'Y') {
+				goto menu;
+			} else {
+				return 0;
+			}
 		} else if (input == 4) {
 			print_credits();
 			printf("\n");
@@ -64,7 +72,11 @@ int main(void) {
 			make_question("\nApakah anda ingin melanjutkan ke main menu? (Y/N)\n", answer_buffer, sizeof(answer_buffer));
 			printf(">> %s", answer_buffer);
 			scanf("%s", &answer);
-			if (answer == 'Y') goto menu;
+			if (answer == 'Y') {
+				goto menu;
+			} else {
+				return 0;
+			}
 		} else if (input == 0) {
 			return 0;
 		} else {
