@@ -11,7 +11,7 @@ struct User {
 	char name[100];
 	unsigned int age;
 	char domisili[30];
-	int test_status;
+	int test_status;							// 0 Normal, 1 Perlu Tes, 2 OTG
 	int common_symptoms;
 	int uncommon_symptoms;
 	int serious_symptoms;
@@ -32,10 +32,14 @@ int main(void) {
 		} else if (input == 2) {
 			FILE *fread;
 			fread = fopen("user.txt", "r");
+			// Jika file ada maka lanjutkan
 			if (fread != NULL) {
 				printf("Memuat user.txt...\n");
 				puts("");
+				
+				// Membaca file
 				read_file(fread);
+				
 				printf("\nData berhasil dimuat!");
 				
 				printf("");
@@ -48,6 +52,7 @@ int main(void) {
 				} else {
 					return 0;
 				}
+			// Apabila file tidak ada	
 			} else {
 				error_message();
 				printf("File database tidak berhasil dibuka, Menghentikan program.\n");
@@ -89,18 +94,23 @@ int main(void) {
 		system("cls");
 		int dma_size = 0;
 		
+		// Menginput jumlah user sesuai dengan keinginan pengguna
 		printf("\nMasukkan banyak user yang ingin diinput: "); scanf("%i", &dma_size);
 		
+		// Membuat variabel pointer untuk dynamic memory allocation
 		struct User *dma_pointer;
+		// Mengalokasikan memori sesuai input user
 		dma_pointer = (struct User *) malloc(dma_size * sizeof(struct User));
 		
 		int i;
+		// Pengulangan untuk input data
 		for (i = 0; i < dma_size; i++) {
 			system("cls");
 			if (i >= 1) {
 				system("pause");
 			}
 			
+			// Menghitung sisa user yang perlu diisi setelah input saat ini
 			int count_left = dma_size - (i+1);
 			printf("\n-=-=-=-=-=-=-=-=-=-=-=-=-=- Input User #%i -=-=-=-=-=-=-=-=-=-=-=-=-=-\n", i+1);
 			printf("\n");
@@ -108,17 +118,18 @@ int main(void) {
 			puts("");
 			
 			getchar();
-			printf("Masukkan nama user\t: ");
+			printf("Masukkan nama user\t\t: ");
 			gets(dma_pointer[i].name);
 			
-			printf("Masukkan umur user\t: ");
+			printf("Masukkan umur user\t\t: ");
 			scanf("%i", &dma_pointer[i].age);
 			
 			getchar();
-			printf("Masukkan tempat domisili user: ");
+			printf("Masukkan tempat domisili user\t: ");
 			gets(dma_pointer[i].domisili);
 			fflush(stdin);
 			
+			// Tidak diinput oleh user, melainkan untuk akses algoritma
 			dma_pointer[i].test_status = 0;
 			dma_pointer[i].common_symptoms = 0;
 			dma_pointer[i].uncommon_symptoms = 0;
@@ -144,12 +155,14 @@ int main(void) {
 				make_question("Apakah anda dapat mencium bau dan mengecap rasa dengan normal?\n", answer_buffer, sizeof(answer_buffer));
 				printf(">> %s", answer_buffer);
 				scanf("%s", &answer);
-				if (answer == 'Y') dma_pointer[i].uncommon_symptoms+=1;
+				if (answer == 'N') dma_pointer[i].uncommon_symptoms+=1;
 				
 				make_question("Apakah anda merasa nyeri di area dada?\n", answer_buffer, sizeof(answer_buffer));
 				printf(">> %s", answer_buffer);
 				scanf("%s", &answer);
 				if (answer == 'Y') dma_pointer[i].serious_symptoms+=1;
+				
+				// Pertanyaan untuk kemungkinan OTG
 			} else if (answer == 'N') {
 				dma_pointer[i].test_status = 2;
 				make_question("Apakah ada anggota keluarga anda yang sering berpergian?\n", answer_buffer, sizeof(answer_buffer));
@@ -170,7 +183,7 @@ int main(void) {
 					make_question("Apakah anda dapat mencium bau dan mengecap rasa dengan normal?\n", answer_buffer, sizeof(answer_buffer));
 					printf(">> %s", answer_buffer);
 					scanf("%s", &answer);
-					if (answer == 'Y') dma_pointer[i].uncommon_symptoms+=1;
+					if (answer == 'N') dma_pointer[i].uncommon_symptoms+=1;
 					
 					make_question("Apakah anda merasa nyeri di area dada?\n", answer_buffer, sizeof(answer_buffer));
 					printf(">> %s", answer_buffer);
@@ -200,6 +213,9 @@ int main(void) {
 				}	
 			}
 			
+			//Perhitungan untuk hasil akhir
+			// Parameter user memerlukan tes: 1 gejala umum dan 1 gejala serius
+			// Parameter OTG: status user bernilai 2
 			check_result:
 				if ((dma_pointer[i].common_symptoms >= 1) && (dma_pointer[i].serious_symptoms >= 1)) {
 					dma_pointer[i].test_status = 1;
@@ -217,9 +233,13 @@ int main(void) {
 	
 		}
 		
+		// FILE Handler (pointer)
 		FILE *fptr;
+		// Membuka file "user.txt" dan menambahkan data menggunakan mode "a" (append)
 		fptr = fopen("user.txt", "a");
+		// Jika file ada maka lanjutkan
 		if (fptr != NULL) {
+			// Pengulangan untuk input data dari structure ke file user.txt
 			for (i = 0; i < dma_size; ++i) {
 				fprintf(fptr, "Nama\t\t: %s\n", dma_pointer[i].name);
 				fprintf(fptr, "Umur\t\t: %i\n", dma_pointer[i].age);
@@ -240,16 +260,21 @@ int main(void) {
 				}
 				fprintf(fptr, "\n");
 			}
+			// Menutup file jika transfer data sudah selesai 
 			fclose(fptr);
 		} else {
+			// Jika file tidak dibuka maka print pesan eror
 			error_message();
 			printf("File database tidak berhasil dibuka, Menghentikan program.\n");
 			return 1;
 		}
 		
+		// Mengembalikan memori yang dialokasikan kembali ke memori
 		free(dma_pointer);
 		char answer;
 		printf("\n");
+		
+		//Pengecekan terakhir sebelum menghentikan program
 		make_question("\nAnda telah menyelesaikan input data, Apakah anda ingin melanjutkan ke main menu? (Y/N)\n", answer_buffer, sizeof(answer_buffer));
 		printf(">> %s", answer_buffer);
 		scanf("%s", &answer);
